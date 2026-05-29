@@ -571,28 +571,52 @@
 
     // ── REPLACE with your Google Apps Script Web App URL ──
     const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbziJEEA8AjAWQ8bPyIriZl-VEmgzXQNLYgRy6tbI2Kr4pWXE4n4U46fb_oQmZP0ZdhR/exec';
+  // File attachment handling
+  let _fileData = '', _fileName = '', _fileType = '';
 
-    const formData = new FormData(this);
-        const urlParams = new URLSearchParams();
-        for (const [key, value] of formData.entries()) {
-          if (value instanceof File) continue;
-          urlParams.append(key, value);
-        }
-
-    try {
-      await fetch(SCRIPT_URL, { method: 'POST', body: urlParams, mode: 'no-cors' });
-      showSuccess();
-    } catch (err) {
-      btn.classList.remove('loading');
-      btn.textContent = 'Send My Mortgage Review Request';
-      alert('Something went wrong. Please try again or email me directly.');
+  document.getElementById('fileInput').addEventListener('change', function() {
+    const file = this.files[0];
+    if (!file) {
+      _fileData = _fileName = _fileType = '';
+      document.getElementById('file-name').textContent = '';
+      return;
     }
+    _fileName = file.name;
+    _fileType = file.type || 'application/octet-stream';
+    document.getElementById('file-name').textContent = file.name;
+    const reader = new FileReader();
+    reader.onload = function() {
+      _fileData = reader.result.split(',')[1] || '';
+    };
+    reader.readAsDataURL(file);
   });
 
-  function showSuccess() {
-    document.getElementById('formCard').classList.add('submitted');
-    window.scrollTo({ top: 0, behavior: 'smooth' });
-  }
+  document.getElementById('mortgageForm').addEventListener('submit', async function(e) {
+    e.preventDefault();
+    const btn = this.querySelector('.submit-btn');
+    if (btn) { btn.classList.add('loading'); btn.textContent = 'Sending…'; }
+
+    const fd = new FormData(this);
+    const payload = {};
+    for (const [key, value] of fd.entries()) {
+      if (value instanceof File) continue;
+      payload[key] = value;
+    }
+    payload.fileData = _fileData;
+    payload.fileName = _fileName;
+    payload.fileType = _fileType;
+
+    try {
+      await fetch(SCRIPT_URL, {
+        method: 'POST',
+        body: JSON.stringify(payload),
+        mode: 'no-cors',
+        headers: { 'Content-Type': 'text/plain' }
+      });
+    } catch (err) {}
+
+    document.querySelector('.form-card').classList.add('submitted');
+  });
 </script>
 
 
