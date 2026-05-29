@@ -160,7 +160,7 @@
     appearance: none;
   }
 
-  input::placeholder { color: #b8b0a6; font-weight: 300; }
+  input::placeholder { color: #555; font-weight: 300; }
 
   input:focus, select:focus {
     outline: none;
@@ -251,7 +251,7 @@
     text-align: center;
     margin-top: 10px;
     font-size: 10px;
-    color: var(--text-muted);
+    color: #333;
     font-weight: 300;
     line-height: 1.6;
   }
@@ -262,12 +262,12 @@
   .form-card.submitted .success-state { display: block; }
 
   .success-icon {
-    width: 56px; height: 56px;
+    width: 60px; height: 60px;
     border-radius: 50%;
-    background: linear-gradient(135deg, var(--navy), var(--navy-light));
+    background: var(--gold);
     display: flex; align-items: center; justify-content: center;
     margin: 0 auto 20px;
-    color: #fff; font-size: 22px;
+    color: var(--navy); font-size: 26px; font-weight: 700;
   }
 
   .success-state h3 {
@@ -276,7 +276,7 @@
     color: var(--navy); margin-bottom: 10px;
   }
 
-  .success-state p { font-size: 14px; color: var(--text-muted); font-weight: 300; }
+  .success-state p { font-size: 14px; color: #333; font-weight: 300; }
 
   /* ── FOOTER ── */
   .footer-avatar {
