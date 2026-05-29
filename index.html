@@ -573,9 +573,14 @@
     const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbziJEEA8AjAWQ8bPyIriZl-VEmgzXQNLYgRy6tbI2Kr4pWXE4n4U46fb_oQmZP0ZdhR/exec';
 
     const formData = new FormData(this);
+        const urlParams = new URLSearchParams();
+        for (const [key, value] of formData.entries()) {
+          if (value instanceof File) continue;
+          urlParams.append(key, value);
+        }
 
     try {
-      await fetch(SCRIPT_URL, { method: 'POST', body: formData, mode: 'no-cors' });
+      await fetch(SCRIPT_URL, { method: 'POST', body: urlParams, mode: 'no-cors' });
       showSuccess();
     } catch (err) {
       btn.classList.remove('loading');
