@@ -562,11 +562,6 @@
 
     const formData = new FormData(this);
 
-    if (SCRIPT_URL === 'https://script.google.com/macros/s/AKfycbzaNvVJK5N3ikdMaEeg52pgamkm_N7GSIIOTN57fl2M8qJ-jA_IxLy7qNGFfNaWv9Yo/exec') {
-      setTimeout(showSuccess, 800);
-      return;
-    }
-
     try {
       await fetch(SCRIPT_URL, { method: 'POST', body: formData, mode: 'no-cors' });
       showSuccess();
