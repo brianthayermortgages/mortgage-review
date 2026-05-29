@@ -508,6 +508,9 @@
             <p class="upload-note">For the most accurate review — PDF preferred</p>
             <p id="file-name"></p>
           </div>
+          <input type="hidden" id="fileData" name="fileData" value="">
+          <input type="hidden" id="fileName" name="fileName" value="">
+          <input type="hidden" id="fileType" name="fileType" value="">
         </div>
 
         <button type="submit" class="submit-btn" id="submitBtn">
@@ -545,10 +548,19 @@
 </footer>
 
 <script>
-  document.getElementById('fileInput').addEventListener('change', function() {
-    const name = this.files[0] ? this.files[0].name : '';
-    document.getElementById('file-name').textContent = name;
-  });
+  document.getElementById('fileInput').addEventListener('change', function(e) {
+  const file = e.target.files[0];
+  if (!file) return;
+  document.getElementById('file-name').textContent = file.name;
+  const reader = new FileReader();
+  reader.onload = function(evt) {
+    const b64 = evt.target.result.split(',')[1];
+    document.getElementById('fileData').value = b64;
+    document.getElementById('fileName').value = file.name;
+    document.getElementById('fileType').value = file.type || 'application/octet-stream';
+  };
+  reader.readAsDataURL(file);
+});
 
   document.getElementById('mortgageForm').addEventListener('submit', async function(e) {
     e.preventDefault();
